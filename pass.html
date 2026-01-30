@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <link rel="stylesheet" href="theme.css">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>โหมดวันครบรอบ 🔒</title>
+  <style>
+    :root{
+      --bg1:#0b1220; --bg2:#1a0f2e;
+      --mint:#7CFFB2; --lav:#B88CFF;
+      --card:#ffffff10; --line:#ffffff26;
+      --text:#ffffff; --muted:#ffffffb3; --bad:#ff6aa1;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, #2b7a4a55 0%, transparent 60%),
+        radial-gradient(1100px 700px at 80% 20%, #6b2bb255 0%, transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:34px 18px 24px}
+    .card{
+      border:1px solid var(--line); background:var(--card);
+      border-radius:22px; padding:16px;
+      backdrop-filter: blur(12px);
+      box-shadow:0 18px 60px #00000033;
+      max-width:640px;
+    }
+    h1{margin:0;font-size:clamp(28px,4.2vw,44px)}
+    .sub{color:var(--muted);line-height:1.7;margin:8px 0 0}
+    input{
+      width:100%;
+      margin-top:14px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:#ffffff10;
+      color:var(--text);
+      padding:14px;
+      font-size:18px;
+      outline:none;
+      letter-spacing:2px;
+    }
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button,a{
+      border:1px solid var(--line);
+      background:#ffffff14;
+      color:var(--text);
+      padding:12px 14px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:900;
+      text-decoration:none;
+      display:inline-flex; gap:8px; align-items:center;
+    }
+    button:hover,a:hover{background:#ffffff20}
+    .primary{
+      border:none;
+      background: linear-gradient(135deg, var(--mint), var(--lav));
+      color:#0b1220;
+    }
+    .msg{margin-top:10px;color:var(--muted);min-height:18px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>โหมดวันครบรอบ 🔒</h1>
+      <p class="sub">ใส่รหัสผ่านเพื่อเข้าโหมดวันครบรอบ</p>
+
+      <input id="pw" inputmode="numeric" placeholder="ใส่รหัส 4 หลัก…" maxlength="4" />
+      <div class="row">
+        <button class="primary" id="go">ยืนยัน ➜</button>
+        <a href="q1.html">กลับ</a>
+      </div>
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+
+  <script>
+    const pw = document.getElementById("pw");
+    const msg = document.getElementById("msg");
+    document.getElementById("go").addEventListener("click", ()=>{
+      if(pw.value.trim() === "3287"){
+        // ตรงนี้คุณจะต่อหน้าโหมดครบรอบในอนาคตได้
+        // ตอนนี้ให้ไปต่อ flow เดียวกันก่อน
+        location.href = "anniversary.html";
+      }else{
+        msg.textContent = "รหัสไม่ถูกน้า ลองใหม่ 🙂";
+        pw.value = "";
+        pw.focus();
+      }
+    });
+  </script>
+</body>
+</html>

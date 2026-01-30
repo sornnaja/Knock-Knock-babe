@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="th">
+<head>
+  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>เกมหมูเด้ง 25 แต้ม 💚💜</title>
+  <style>
+    :root{
+      --bg1:#0b1220; --bg2:#1a0f2e;
+      --mint:#7CFFB2; --lav:#B88CFF;
+      --card:#ffffff10; --line:#ffffff26;
+      --text:#ffffff; --muted:#ffffffb3;
+      --ok:#7CFFB2;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, #2b7a4a55 0%, transparent 60%),
+        radial-gradient(1100px 700px at 80% 20%, #6b2bb255 0%, transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+
+      touch-action: manipulation;
+     -webkit-tap-highlight-color: transparent;
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:34px 18px 24px}
+    .card{
+      border:1px solid var(--line); background:var(--card);
+      border-radius:22px; padding:16px;
+      backdrop-filter: blur(12px);
+      box-shadow:0 18px 60px #00000033;
+    }
+    .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end}
+    h1{margin:0;font-size:clamp(28px,4.2vw,44px)}
+    .sub{color:var(--muted);line-height:1.6;margin:6px 0 0}
+    .hud{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid var(--line); background:#ffffff12;
+      color:var(--muted); font-size:13px;
+    }
+    .score{color:#fff;font-weight:900}
+    .bar{height:10px;border-radius:999px;background:#ffffff14;border:1px solid var(--line);overflow:hidden;width:220px}
+    .bar > div{height:100%;width:0%;background:linear-gradient(135deg,var(--mint),var(--lav))}
+    .grid{
+      display:grid; gap:12px;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top:14px;
+    }
+    @media (max-width: 520px){ .grid{gap:10px;} }
+    .hole{
+      aspect-ratio: 1/1;
+      border-radius:20px;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(60% 60% at 50% 60%, #00000066 0%, transparent 60%),
+        #ffffff10;
+      position:relative;
+      overflow:hidden;
+      user-select:none;
+      cursor:pointer;
+    }
+    .mole{
+      position:absolute;
+      left:50%;
+      bottom:-8%;
+      width:95%;
+      transform:translateX(-50%) translateY(120%);
+      transition: transform .10s ease;
+      filter: drop-shadow(0 14px 18px #00000066);
+      pointer-events:none;
+    }
+    .hole.up .mole{ transform:translateX(-50%) translateY(0%); }
+    .tap{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    button,a.btn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:#ffffff14;
+      color:var(--text);
+      padding:11px 14px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:900;
+      text-decoration:none;
+      display:inline-flex; gap:8px; align-items:center;
+      transition:.18s transform,.18s background, .18s opacity;
+    }
+    button:hover,a.btn:hover{transform:translateY(-1px);background:#ffffff20}
+    .primary{
+      border:none;
+      background: linear-gradient(135deg, var(--mint), var(--lav));
+      color:#0b1220;
+    }
+    .disabled{opacity:.45; pointer-events:none;}
+    .toast{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+      min-height:18px;
+    }
+
+    /* WIN POPUP */
+    .modal{
+      position:fixed; inset:0;
+      background:#000000aa;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+    .modal.show{display:flex;}
+    .modal .box{
+      width:min(520px, 92vw);
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:#11111fe6;
+      backdrop-filter: blur(12px);
+      padding:18px;
+      box-shadow:0 18px 60px #00000066;
+      text-align:center;
+    }
+    .modal .title{
+      font-size:28px;
+      font-weight:1000;
+    }
+    .modal .desc{
+      margin-top:10px;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:15px;
+    }
+    .modal .row{
+      margin-top:14px;
+      display:flex;
+      justify-content:center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="top">
+        <div>
+          <h1>Catch me if you can 💚💜</h1>
+          <p class="sub">คลิกเมียที่โผล่ขึ้นมา สะสมคะแนนให้ถึง 25 เพื่อไปหน้าถัดไป</p>
+        </div>
+        <div class="hud">
+          <div class="pill">คะแนน: <span class="score" id="score">0</span>/25</div>
+          <div class="bar" aria-label="progress"><div id="barFill"></div></div>
+        </div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+
+      <div class="row">
+        <button id="start" class="primary">เริ่มเกม ▶</button>
+        <button id="stop">หยุดเกม ⏸</button>
+        <a id="next" class="btn disabled" href="vent.html">ไปหน้าถัดไป ➜</a>
+      </div>
+
+      <div class="toast" id="toast">กดเริ่มเกมได้เลย!</div>
+      
+    </div>
+  </div>
+
+  <script>
+    const TARGET = 1;
+    const IMG = "assets/moodeng.png";
+    const grid = document.getElementById("grid");
+    const scoreEl = document.getElementById("score");
+    const barFill = document.getElementById("barFill");
+    const toast = document.getElementById("toast");
+    const nextBtn = document.getElementById("next");
+
+    // WIN POPUP refs
+    const winModal = document.getElementById("winModal");
+    const winNext = document.getElementById("winNext");
+    let won = false; // กันชนะซ้ำ
+
+    let score = 0;
+    let running = false;
+    let tick = null;
+    let last = -1;
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    function showWinPopup(){
+      winModal.classList.add("show");
+      winModal.setAttribute("aria-hidden","false");
+    }
+
+    function updateUI(){
+      scoreEl.textContent = score;
+      const pct = clamp(Math.round((score/TARGET)*100), 0, 100);
+      barFill.style.width = pct + "%";
+
+      if(score >= TARGET && !won){
+        won = true;
+
+        stop(); // หยุดเกมทันที
+
+        toast.innerHTML = "🎉 <b>YOU WIN!!</b> 🎉";
+        nextBtn.classList.remove("disabled");
+        localStorage.setItem("passed_game","yes");
+
+        showWinPopup();
+      }else if(score < TARGET){
+        nextBtn.classList.add("disabled");
+        toast.innerHTML = "ตีให้ครบ 25 แต้มเพื่อปลดล็อกหน้าถัดไป";
+      }
+    }
+
+    function buildGrid(){
+      grid.innerHTML = "";
+      for(let i=0;i<9;i++){
+        const hole = document.createElement("div");
+        hole.className = "hole";
+        hole.dataset.idx = String(i);
+
+        const img = document.createElement("img");
+        img.className = "mole";
+        img.src = IMG;
+        img.alt = "moodeng";
+        img.onerror = () => { toast.textContent = "หา assets/moodeng.png ไม่เจอ — ใส่รูปไว้ในโฟลเดอร์ assets/"; };
+
+        hole.appendChild(img);
+
+        // click to score
+       hole.addEventListener("pointerdown", (e) => {
+  if(!running) return;
+  if(!hole.classList.contains("up")) return;
+  if(hole.dataset.hit === "1") return;
+
+  // กันมือถือเลื่อนจอ/ดับเบิลแท็ป
+  e.preventDefault();
+
+  hole.dataset.hit = "1";
+
+  if(score < TARGET){
+    score++;
+    updateUI();
+  }
+
+  // ซ่อนทันทีให้รู้สึกว่ากดติด
+  hole.classList.remove("up");
+
+  // กันกดซ้ำ
+  setTimeout(()=>{ hole.dataset.hit="0"; }, 120);
+}, {passive:false});
+
+
+        grid.appendChild(hole);
+      }
+    }
+
+    function showRandom(){
+      if(!running) return;
+      const holes = [...document.querySelectorAll(".hole")];
+
+      // hide all first
+      holes.forEach(h => h.classList.remove("up"));
+
+      // choose different from last
+      let idx = Math.floor(Math.random()*holes.length);
+      if(idx === last) idx = (idx + 1 + Math.floor(Math.random()*7)) % holes.length;
+      last = idx;
+
+      const hole = holes[idx];
+      hole.dataset.hit = "0";
+      hole.classList.add("up");
+
+      // auto hide after a short time
+      setTimeout(() => hole.classList.remove("up"), 550);
+    }
+
+    function start(){
+      if(running) return;
+      if(won) return; // ชนะแล้วไม่ให้เริ่มใหม่ (ถ้าอยากให้เริ่มใหม่ เพิ่มปุ่มรีเซ็ตได้)
+      running = true;
+      toast.textContent = "เริ่มแล้ว! ตีหมูเด้งเร็ววว";
+      tick = setInterval(showRandom, 700);
+      showRandom();
+    }
+
+    function stop(){
+      running = false;
+      clearInterval(tick);
+      tick = null;
+      document.querySelectorAll(".hole").forEach(h => h.classList.remove("up"));
+      // ไม่ตั้ง toast ที่นี่ เพื่อไม่ทับ YOU WIN
+    }
+
+    document.getElementById("start").addEventListener("click", start);
+
+    document.getElementById("stop").addEventListener("click", () => {
+      stop();
+      toast.textContent = "หยุดเกมแล้ว";
+    });
+
+    // init
+    buildGrid();
+    updateUI();
+
+    // optional: prevent going next if not done
+    nextBtn.addEventListener("click", (e)=>{
+      if(score < TARGET){
+        e.preventDefault();
+        toast.textContent = "ยังไม่ครบ 25 แต้ม น้าา";
+      }
+    });
+
+    // popup next
+    winNext.addEventListener("click", ()=>{
+      location.href = "vent.html";
+    });
+  </script>
+
+  <!-- WIN POPUP -->
+  <div class="modal" id="winModal" aria-hidden="true">
+    <div class="box">
+      <div class="title">🎉 YOU WIN!! 🎉</div>
+      <div class="desc">ตีหมูเด้งครบ 25 แต้มแล้ว เก่งมากกก 💚💜</div>
+      <div class="row">
+        <button class="primary" id="winNext">ไปต่อ ➜</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
