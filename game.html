@@ -173,7 +173,7 @@
   </div>
 
   <script>
-    const TARGET = 1;
+    const TARGET = 25;
     const IMG = "assets/moodeng.png";
     const grid = document.getElementById("grid");
     const scoreEl = document.getElementById("score");
@@ -286,7 +286,7 @@
       if(running) return;
       if(won) return; // ชนะแล้วไม่ให้เริ่มใหม่ (ถ้าอยากให้เริ่มใหม่ เพิ่มปุ่มรีเซ็ตได้)
       running = true;
-      toast.textContent = "เริ่มแล้ว! ตีหมูเด้งเร็ววว";
+      toast.textContent = "เริ่มแล้ว! จับเค้าเร็ววว";
       tick = setInterval(showRandom, 700);
       showRandom();
     }
@@ -328,7 +328,7 @@
   <div class="modal" id="winModal" aria-hidden="true">
     <div class="box">
       <div class="title">🎉 YOU WIN!! 🎉</div>
-      <div class="desc">ตีหมูเด้งครบ 25 แต้มแล้ว เก่งมากกก 💚💜</div>
+      <div class="desc">ตีครบ 25 แต้มแล้ว เก่งมากกก 💚💜</div>
       <div class="row">
         <button class="primary" id="winNext">ไปต่อ ➜</button>
       </div>
@@ -337,3 +337,4 @@
 
 </body>
 </html>
+
